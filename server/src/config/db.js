@@ -5,18 +5,15 @@ const config   = require('./env');
 
 // ── Create pool ───────────────────────────────────────────────────────────────
 const pool = new Pool({
-  host:     config.db.host,
-  port:     config.db.port,
-  database: config.db.name,
-  user:     config.db.user,
-  password: config.db.password,
-ssl: {
-  rejectUnauthorized: false,
-},
- 
-  max:              10,
-  idleTimeoutMillis: 30000, // release idle connections after 30s
-  connectionTimeoutMillis: 5000, // throw if can't get connection in 5s
+  connectionString: config.databaseUrl,
+
+  ssl: {
+    rejectUnauthorized: false,
+  },
+
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000,
 });
 
 pool.on('connect', () => {

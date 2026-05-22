@@ -22,15 +22,9 @@ const config = {
   isDev:    (process.env.NODE_ENV || 'development') === 'development',
   isProd:   process.env.NODE_ENV === 'production',
 
-  // Database
-  db: {
-    host:     process.env.DB_HOST     || 'localhost',
-    port:     parseInt(process.env.DB_PORT || '5432', 10),
-    name:     requireEnv('DB_NAME'),
-    user:     requireEnv('DB_USER'),
-    password: requireEnv('DB_PASSWORD'),
-    ssl:      process.env.DB_SSL === 'true',
-  },
+
+ // Database
+databaseUrl: requireEnv('DATABASE_URL'),
 
   // CORS
   corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
