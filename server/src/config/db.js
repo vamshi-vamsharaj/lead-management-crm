@@ -10,17 +10,15 @@ const pool = new Pool({
   database: config.db.name,
   user:     config.db.user,
   password: config.db.password,
-  ssl:      config.db.ssl ? { rejectUnauthorized: false } : false,
-
-  // Pool sizing:
-  //   max: 10 is appropriate for a single-server app.
-  //   In production on large servers you'd increase this.
+ssl: {
+  rejectUnauthorized: false,
+},
+ 
   max:              10,
   idleTimeoutMillis: 30000, // release idle connections after 30s
   connectionTimeoutMillis: 5000, // throw if can't get connection in 5s
 });
 
-// ── Pool event listeners ──────────────────────────────────────────────────────
 pool.on('connect', () => {
   if (config.isDev) {
     console.log('🔌 New PostgreSQL connection established');
@@ -28,8 +26,6 @@ pool.on('connect', () => {
 });
 
 pool.on('error', (err) => {
-  // This fires for unexpected errors on idle clients.
-  // Log and let the process decide whether to crash.
   console.error('❌ PostgreSQL pool error:', err.message);
 });
 
