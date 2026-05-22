@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design system base ───────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-canvas text-ink-primary;
+    min-height: 100vh;
+    /* Subtle noise texture for depth */
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124,106,247,0.06) 0%, transparent 60%);
+  }
+
+  ::-webkit-scrollbar        { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track  { background: transparent; }
+  ::-webkit-scrollbar-thumb  { @apply bg-muted rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-border; }
+
+  ::selection { background: rgba(124,106,247,0.3); color: #F0F2F8; }
+}
+
+/* ── Reusable component classes ──────────────────────────────────────────── */
+@layer components {
+
+  /* Card surfaces */
+  .card {
+    @apply bg-surface border border-border rounded-xl shadow-card;
+  }
+  .card-raised {
+    @apply bg-raised border border-border rounded-xl shadow-card;
+  }
+
+  /* Premium input fields */
+  .field-input {
+    @apply w-full bg-raised border border-border rounded-lg px-3.5 py-2.5
+           text-sm text-ink-primary placeholder:text-ink-muted
+           focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30
+           transition-colors duration-150;
+  }
+  .field-input-error {
+    @apply border-status-rejected focus:border-status-rejected focus:ring-status-rejected/20;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-lg
+           bg-accent hover:bg-accent-hover active:scale-[0.98]
+           text-white text-sm font-medium
+           transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-lg
+           bg-raised border border-border hover:bg-muted/40 active:scale-[0.98]
+           text-ink-secondary hover:text-ink-primary text-sm font-medium
+           transition-all duration-150;
+  }
+  .btn-danger {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-lg
+           bg-status-rejected/10 border border-status-rejected/30
+           hover:bg-status-rejected hover:border-status-rejected active:scale-[0.98]
+           text-status-rejected hover:text-white text-sm font-medium
+           transition-all duration-150;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md
+           hover:bg-raised text-ink-secondary hover:text-ink-primary
+           text-sm transition-all duration-150;
+  }
+
+  /* Label for form fields */
+  .field-label {
+    @apply block text-xs font-medium text-ink-secondary uppercase tracking-wider mb-1.5;
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply bg-gradient-to-r from-surface via-raised to-surface
+           bg-[length:200%_100%] animate-shimmer rounded;
+  }
+
+  /* Stat number display */
+  .stat-number {
+    @apply font-mono text-3xl font-medium tabular-nums;
+  }
+}
+
+/* ── Utility overrides ───────────────────────────────────────────────────── */
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #F0F2F8 0%, #8B90A7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .accent-gradient {
+    background: linear-gradient(135deg, #7C6AF7 0%, #9E8FFA 100%);
+  }
+  .border-subtle {
+    border-color: rgba(37, 40, 54, 0.8);
+  }
+}
