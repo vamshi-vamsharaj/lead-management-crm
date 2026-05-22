@@ -1,43 +1,3 @@
-/**
- * src/features/leads/hooks/useLeads.js
- *
- * All React Query hooks for the leads feature.
- *
- * ════════════════════════════════════════════════════════════
- * WHY REACT QUERY INSTEAD OF useState + useEffect?
- * ════════════════════════════════════════════════════════════
- *
- * Manual approach (what beginners do):
- *   const [leads, setLeads] = useState([])
- *   const [loading, setLoading] = useState(false)
- *   const [error, setError] = useState(null)
- *   useEffect(() => {
- *     setLoading(true)
- *     fetch('/api/leads').then(r => r.json()).then(setLeads).catch(setError).finally(() => setLoading(false))
- *   }, [])
- *
- * Problems with manual approach:
- *   - No caching: every navigation re-fetches the same data
- *   - No deduplication: two components mounting simultaneously send two requests
- *   - No background refresh: data goes stale while the user looks at it
- *   - 15+ lines of boilerplate per query
- *   - Race conditions when filters change quickly
- *   - No optimistic updates
- *
- * React Query gives you all of this for FREE with 3 lines of code.
- *
- * ════════════════════════════════════════════════════════════
- * QUERY KEY STRATEGY
- * ════════════════════════════════════════════════════════════
- * Query keys are like cache addresses. The key design matters:
- *   ['leads']            → all leads (any filter)
- *   ['leads', filters]   → specific filtered view
- *   ['leads', 'stats']   → dashboard stats
- *   ['leads', id]        → single lead
- *
- * invalidateQueries({ queryKey: ['leads'] }) invalidates ALL of the above.
- * This means after creating a lead, stats and the list both refresh. ✓
- */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
@@ -49,7 +9,6 @@ import {
   deleteLead,
 } from '../../../services/api/leads.api'
 
-// ── Query key factory — single source of truth for all cache keys ─────────────
 export const leadsKeys = {
   all:     () => ['leads'],
   list:    (filters) => ['leads', 'list', filters],
@@ -72,10 +31,7 @@ export function useLeadsQuery(filters = {}) {
   })
 }
 
-// ── useStatsQuery ─────────────────────────────────────────────────────────────
-/**
- * Fetches dashboard statistics.
- */
+
 export function useStatsQuery() {
   return useQuery({
     queryKey:  leadsKeys.stats(),
@@ -85,10 +41,7 @@ export function useStatsQuery() {
   })
 }
 
-// ── useCreateLeadMutation ─────────────────────────────────────────────────────
-/**
- * Creates a new lead and invalidates the leads list and stats.
- */
+
 export function useCreateLeadMutation() {
   const queryClient = useQueryClient()
 
@@ -101,29 +54,10 @@ export function useCreateLeadMutation() {
       toast.success(`Lead "${newLead.name}" added successfully`)
     },
 
-    // onError is not needed here — the Axios interceptor already shows a toast.
-    // Avoid double-toasting.
   })
 }
 
-// ── useUpdateLeadStatusMutation ───────────────────────────────────────────────
-/**
- * Updates a lead's status with OPTIMISTIC UPDATES.
- *
- * WHY OPTIMISTIC UPDATES?
- *   When a user clicks "Interested" on a status dropdown, they expect
- *   instant feedback. Without optimistic updates, they click → nothing
- *   happens → 300ms later the badge changes. That delay feels broken.
- *
- *   Optimistic updates:
- *   1. Immediately update the cache (UI changes instantly)
- *   2. Send the API request in the background
- *   3. If the request succeeds → commit the change
- *   4. If the request fails → ROLLBACK to the previous state + show error
- *
- *   The user gets instant feedback. If something goes wrong, the UI
- *   reverts gracefully. This is how Linear, Notion, and Jira work.
- */
+
 export function useUpdateLeadStatusMutation() {
   const queryClient = useQueryClient()
 

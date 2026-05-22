@@ -1,6 +1,3 @@
-/**
- * src/components/common/SourceBadge.jsx
- */
 import { Phone, MessageCircle, MapPin } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

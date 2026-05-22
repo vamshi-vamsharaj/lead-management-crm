@@ -1,12 +1,3 @@
-/**
- * src/components/common/SkeletonTable.jsx
- *
- * Skeleton loaders match the visual shape of the real content.
- * This prevents "layout shift" — the page doesn't jump when data arrives.
- * Every production app (Linear, Notion, GitHub) uses skeletons over spinners
- * for data tables because they communicate the structure that's loading.
- */
-
 import { cn } from '@/lib/utils'
 
 function SkeletonCell({ className }) {

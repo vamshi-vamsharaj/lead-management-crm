@@ -1,10 +1,3 @@
-/**
- * src/components/common/StatusBadge.jsx
- *
- * Color-coded pill badge for lead status.
- * Used in the table and the status dropdown.
- */
-
 import { cn } from '@/lib/utils'
 
 const STATUS_CONFIG = {

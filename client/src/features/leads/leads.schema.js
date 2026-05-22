@@ -1,8 +1,3 @@
-/**
- * src/features/leads/leads.schema.js
- * Zod schema for the Add Lead form — mirrors the backend validator.
- * Running the same schema on both ends means the same rules apply everywhere.
- */
 
 import { z } from 'zod'
 

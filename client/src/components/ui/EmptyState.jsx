@@ -1,10 +1,3 @@
-/**
- * src/components/common/EmptyState.jsx
- *
- * Empty states with a CTA — never show a blank table.
- * A good empty state explains what's missing and tells the user what to do.
- */
-
 import { Users, SearchX } from 'lucide-react'
 
 export default function EmptyState({ onAddLead, isFiltered = false }) {
