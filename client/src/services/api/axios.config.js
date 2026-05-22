@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 
 // ── Create instance ────────────────────────────────────────────────────────────
 const apiClient = axios.create({
-  baseURL: '/api/v1',   // Vite proxies this to http://localhost:5000/api/v1
+ baseURL: import.meta.env.VITE_API_URL,   // Vite proxies this to http://localhost:5000/api/v1
   timeout: 10000,       // 10s — fail fast rather than hang indefinitely
   headers: {
     'Content-Type': 'application/json',
