@@ -1,28 +1,3 @@
-/**
- * src/utils/ApiResponse.js
- *
- * Standardized response envelope for ALL API responses.
- *
- * WHY A CONSISTENT RESPONSE ENVELOPE?
- *   Without this, different developers write different response shapes:
- *     res.json({ leads: [...] })          // route A
- *     res.json({ data: { leads: [...] }}) // route B
- *     res.json([...])                     // route C
- *
- *   Frontend developers then write defensive code:
- *     const data = response.leads || response.data?.leads || response
- *
- *   A consistent envelope means frontend code is predictable:
- *     response.data    → always the payload
- *     response.success → always a boolean
- *     response.message → always a human-readable string
- *
- *   This is what every professional API (Stripe, Twilio, GitHub) does.
- *
- * USAGE IN CONTROLLERS:
- *   return ApiResponse.success(res, 201, lead, 'Lead created successfully');
- *   return ApiResponse.error(res, 404, 'Lead not found');
- */
 
 const ApiResponse = {
   /**

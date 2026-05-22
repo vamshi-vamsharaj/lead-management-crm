@@ -1,27 +1,10 @@
-/**
- * src/utils/constants.js
- *
- * Application-wide constants.
- *
- * WHY CONSTANTS INSTEAD OF MAGIC STRINGS?
- *   Writing 'interested' in 10 different files means:
- *   - A typo ('intersted') silently produces wrong behavior
- *   - Renaming it requires a project-wide find-and-replace
- *   - A code reviewer can't know if 'interested' in file A
- *     refers to the same concept as 'interested' in file B
- *
- *   LEAD_STATUS.INTERESTED is unambiguous, typo-safe (IDE catches it),
- *   and refactorable in one place.
- */
 
-// ── Mirrors PostgreSQL enum: lead_source ──────────────────────────────────────
 const LEAD_SOURCE = Object.freeze({
   CALL:      'call',
   WHATSAPP:  'whatsapp',
   FIELD:     'field',
 });
 
-// ── Mirrors PostgreSQL enum: lead_status ─────────────────────────────────────
 const LEAD_STATUS = Object.freeze({
   NEW:           'new',
   INTERESTED:    'interested',
@@ -29,7 +12,6 @@ const LEAD_STATUS = Object.freeze({
   CONVERTED:     'converted',
 });
 
-// ── HTTP status codes — avoid magic numbers in controllers ───────────────────
 const HTTP = Object.freeze({
   OK:         200,
   CREATED:    201,
@@ -41,7 +23,6 @@ const HTTP = Object.freeze({
   INTERNAL:     500,
 });
 
-// ── Pagination defaults ───────────────────────────────────────────────────────
 const PAGINATION = Object.freeze({
   DEFAULT_PAGE:  1,
   DEFAULT_LIMIT: 20,

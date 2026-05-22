@@ -1,62 +1,15 @@
-/**
- * src/repositories/leads.repository.js
- *
- * The ONLY file in the application that writes raw SQL.
- *
- * ═══════════════════════════════════════════════════════
- * WHAT IS THE REPOSITORY PATTERN?
- * ═══════════════════════════════════════════════════════
- * The repository pattern is an abstraction over your database.
- * Every other layer (service, controller) calls repository functions
- * like `leadsRepo.findById(id)` — they have no idea that PostgreSQL
- * is involved, what table the data comes from, or how the SQL is structured.
- *
- * WHY THIS MATTERS IN A REAL COMPANY:
- *   1. Swappable storage: If you migrate from PostgreSQL to MongoDB,
- *      you rewrite only this file. Services and controllers are untouched.
- *
- *   2. Testability: In tests, you mock/stub this layer. Your service
- *      logic is tested without a real database.
- *
- *   3. Readability: Services read like business logic ("get lead by id,
- *      if not found throw error"). They don't read like SQL.
- *
- *   4. Single responsibility: This file's only job is "translate between
- *      JavaScript objects and database rows." It does nothing else.
- *
- * RULES FOR THIS FILE:
- *   ✅ Write SQL queries
- *   ✅ Accept plain arguments (id, name, status…)
- *   ✅ Return plain JavaScript objects
- *   ❌ Never throw ApiError (that's the service layer's job)
- *   ❌ Never access req or res
- *   ❌ Never contain business logic
- * ═══════════════════════════════════════════════════════
- */
 
 const db = require('../config/db');
 
 const leadsRepository = {
 
-  /**
-   * Find all leads with optional search, filter, and pagination.
-   *
-   * Dynamic WHERE clause building is a classic pattern.
-   * We build the conditions array and params array together,
-   * ensuring the $N placeholders stay in sync with the params.
-   *
-   * SECURITY NOTE: params are passed to pg as parameterized values.
-   * They are NEVER interpolated into the SQL string directly.
-   * This is complete SQL injection protection.
-   */
+
   async findAll({ search, status, source, page, limit }) {
     const conditions = [];
     const params     = [];
     let   paramIndex = 1;
 
     if (search) {
-      // ILIKE = case-insensitive LIKE in PostgreSQL.
-      // The OR covers both name and phone search in one condition.
       conditions.push(
         `(name ILIKE $${paramIndex} OR phone ILIKE $${paramIndex})`
       );
@@ -117,10 +70,7 @@ const leadsRepository = {
     };
   },
 
-  /**
-   * Find a single lead by its UUID primary key.
-   * Returns the row object or undefined (not null) if not found.
-   */
+
   async findById(id) {
     const { rows } = await db.query(
       `SELECT id, name, phone, source, status, notes, created_at, updated_at
@@ -131,9 +81,7 @@ const leadsRepository = {
     return rows[0]; // undefined if no match
   },
 
-  /**
-   * Find a lead by phone number (for duplicate detection).
-   */
+
   async findByPhone(phone) {
     const { rows } = await db.query(
       `SELECT id, phone FROM leads WHERE phone = $1`,
@@ -142,11 +90,7 @@ const leadsRepository = {
     return rows[0];
   },
 
-  /**
-   * Insert a new lead and return the full created record.
-   * RETURNING * is a PostgreSQL feature — it returns the inserted row
-   * without needing a second SELECT query. One round-trip to the DB.
-   */
+
   async create({ name, phone, source, notes }) {
     const { rows } = await db.query(
       `INSERT INTO leads (name, phone, source, notes)
@@ -157,10 +101,7 @@ const leadsRepository = {
     return rows[0];
   },
 
-  /**
-   * Update only the status field of a lead.
-   * The updated_at trigger handles the timestamp automatically.
-   */
+
   async updateStatus(id, status) {
     const { rows } = await db.query(
       `UPDATE leads
@@ -172,10 +113,7 @@ const leadsRepository = {
     return rows[0]; // undefined if no row matched
   },
 
-  /**
-   * Delete a lead by ID.
-   * Returns the deleted row (useful for a "Lead deleted: John Doe" message).
-   */
+
   async deleteById(id) {
     const { rows } = await db.query(
       `DELETE FROM leads
@@ -186,11 +124,7 @@ const leadsRepository = {
     return rows[0]; // undefined if no row matched
   },
 
-  /**
-   * Aggregate counts by status — used for the dashboard.
-   * A single SQL query replaces 4 separate count queries.
-   * FILTER (WHERE ...) is a PostgreSQL aggregate extension — efficient.
-   */
+
   async getStats() {
     const { rows } = await db.query(`
       SELECT

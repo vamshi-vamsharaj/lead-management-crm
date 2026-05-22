@@ -1,10 +1,3 @@
-/**
- * database/seeds/run.js
- *
- * Runs all seed SQL files in order.
- * Seeds are idempotent — safe to run multiple times because
- * every INSERT uses ON CONFLICT DO NOTHING.
- */
 
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
 

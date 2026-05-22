@@ -1,28 +1,3 @@
-/**
- * src/utils/ApiError.js
- *
- * Custom error class for application-level errors.
- *
- * WHY A CUSTOM ERROR CLASS?
- *   The default `Error` object has only `message` and `stack`.
- *   When a lead is not found, you need to communicate:
- *     - What happened (message)
- *     - What HTTP status to send (statusCode)
- *     - Whether this is an operational error or a bug (isOperational)
- *
- *   isOperational = true  → "We expected this could happen" (404, 400, 409)
- *   isOperational = false → "This is a bug" (uncaught TypeError, DB crash)
- *
- *   The global error handler uses isOperational to decide:
- *     - Operational errors → send the message to the client (safe)
- *     - Non-operational errors → send a generic "Internal Server Error" (safe)
- *       and log the full error internally (so developers can debug)
- *
- * HOW IT SCALES:
- *   In large companies, this class is extended further:
- *   DatabaseError, ValidationError, AuthError — each with custom
- *   logging behavior, Sentry integration, and alerting rules.
- */
 
 class ApiError extends Error {
   /**

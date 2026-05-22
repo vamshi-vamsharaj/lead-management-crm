@@ -1,19 +1,4 @@
--- =============================================================
--- Seed: 001_sample_leads.sql
---
--- WHY SEED DATA MATTERS FOR DEVELOPMENT:
---   Building a UI against an empty database is like designing
---   a restaurant menu without food. You can't see how the leads
---   table looks with real data, can't test filtering/sorting,
---   can't validate that status badges render correctly, and
---   can't tell if your pagination logic works.
---
---   Seed data should be:
---   1. Realistic — real-looking names/phones, not "test1", "test2"
---   2. Varied — cover every status and every source
---   3. Safe — uses INSERT ... ON CONFLICT DO NOTHING so running
---              the seed multiple times doesn't throw errors
--- =============================================================
+
 
 INSERT INTO leads (name, phone, source, status, notes, created_at) VALUES
 

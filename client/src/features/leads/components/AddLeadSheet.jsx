@@ -1,22 +1,4 @@
-/**
- * src/features/leads/components/AddLeadSheet.jsx
- *
- * Right-side slide-over panel for adding a new lead.
- *
- * WHY A SHEET INSTEAD OF A MODAL OR NEW PAGE?
- *   - Modal: Centered popups feel heavy for forms. No context preservation.
- *   - New page: Navigation breaks flow. Back button needed. URL changes.
- *   - Sheet: Context visible behind it. Feels native to SaaS apps.
- *     Linear, Notion, and Jira all use sheets for inline creation.
- *
- * WHY REACT HOOK FORM + ZOD?
- *   React Hook Form uses uncontrolled inputs (refs, not state).
- *   This means: no re-render on every keystroke. Form with 10 fields?
- *   0 re-renders while typing. With useState it's 1 re-render per character.
- *
- *   Zod via @hookform/resolvers connects the schema directly to the form.
- *   One schema definition = validation rules + TypeScript types + error messages.
- */
+
 
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'

@@ -1,12 +1,3 @@
-/**
- * src/features/leads/components/DeleteConfirmModal.jsx
- *
- * WHY CONFIRM BEFORE DELETING?
- *   Destructive actions are irreversible. A user who fat-fingers
- *   the delete button loses data permanently. A confirmation step
- *   forces intentionality. The modal uses "danger" styling (red) to
- *   communicate the severity — the color itself is a warning signal.
- */
 
 import { useEffect } from 'react'
 import { AlertTriangle, X, Loader2 } from 'lucide-react'

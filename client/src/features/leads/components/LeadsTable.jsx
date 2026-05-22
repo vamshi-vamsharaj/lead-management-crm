@@ -1,18 +1,3 @@
-/**
- * src/features/leads/components/LeadsTable.jsx
- *
- * The heart of the application — a premium data table.
- *
- * WHAT MAKES A TABLE FEEL PREMIUM:
- *   1. Consistent row height and vertical rhythm
- *   2. Avatar/initials instead of raw text in the name column
- *   3. Colored badges for every categorical column (status, source)
- *   4. Relative timestamps ("2 hours ago") not raw dates
- *   5. Subtle hover states — rows respond to cursor
- *   6. Sticky header — column labels stay visible when scrolling
- *   7. Proper empty and loading states — never a blank screen
- *   8. Actions are icon buttons (not text links) with tooltips
- */
 
 import { useState } from 'react'
 import { Trash2, Phone, Clock } from 'lucide-react'

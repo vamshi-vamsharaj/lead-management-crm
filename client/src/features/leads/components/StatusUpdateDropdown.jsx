@@ -1,10 +1,3 @@
-/**
- * src/features/leads/components/StatusUpdateDropdown.jsx
- *
- * Inline dropdown to update a lead's status.
- * Uses optimistic updates — the badge changes INSTANTLY on click,
- * then the API request fires in the background.
- */
 
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Check, Loader2 } from 'lucide-react'

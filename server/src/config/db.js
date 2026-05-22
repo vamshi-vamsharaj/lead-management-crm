@@ -1,29 +1,4 @@
-/**
- * src/config/db.js
- *
- * PostgreSQL connection pool.
- *
- * WHY A POOL INSTEAD OF A NEW CONNECTION PER QUERY?
- *   Opening a TCP connection to PostgreSQL takes ~50ms.
- *   Under load (100 requests/second), creating a new connection
- *   per query would be catastrophically slow and exhaust the
- *   database's connection limit.
- *
- *   A pool maintains a set of open connections (default: 10)
- *   and reuses them. A query borrows a connection, uses it,
- *   returns it to the pool. Fast and efficient.
- *
- * WHY A SINGLETON?
- *   Node.js module system caches require() calls.
- *   Every file that does `require('./config/db')` gets the same
- *   pool instance — not a new pool. This is intentional.
- *   One pool for the entire app lifetime.
- *
- * WHY EXPORT `query` DIRECTLY?
- *   Repositories call `db.query(sql, params)` — they never
- *   manage connection lifecycle themselves. The pool handles that.
- *   This keeps repository code clean and focused on SQL.
- */
+
 
 const { Pool } = require('pg');
 const config   = require('./env');

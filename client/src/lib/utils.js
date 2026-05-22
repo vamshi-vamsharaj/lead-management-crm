@@ -1,30 +1,14 @@
-/**
- * src/lib/utils.js
- *
- * Shared utilities used across the entire frontend.
- */
 
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { format, formatDistanceToNow } from 'date-fns'
 
-/**
- * cn() — className merger.
- * Combines clsx (conditional classes) with tailwind-merge (deduplication).
- *
- * WHY BOTH?
- *   clsx handles conditional logic: cn('base', isActive && 'active')
- *   tailwind-merge prevents conflicts: cn('px-2', 'px-4') → 'px-4' (not both)
- *   Together they're the standard for Tailwind + React projects.
- */
+
 export function cn(...inputs) {
   return twMerge(clsx(inputs))
 }
 
-/**
- * Format a date string for display in the leads table.
- * Shows relative time for recent dates, absolute for older ones.
- */
+
 export function formatDate(dateString) {
   if (!dateString) return '—'
   const date = new Date(dateString)

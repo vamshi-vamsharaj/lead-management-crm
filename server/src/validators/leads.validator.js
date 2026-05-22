@@ -1,25 +1,7 @@
-/**
- * src/validators/leads.validator.js
- *
- * Zod schemas for all lead-related API endpoints.
- *
- * WHY ZOD SCHEMAS ARE DEFINED HERE (NOT INLINE IN ROUTES)?
- *   Centralized schemas are:
- *   - Reusable (same schema can be used in tests, docs generation, etc.)
- *   - Readable (route files stay clean — just method + middleware + handler)
- *   - Maintainable (one place to update validation rules)
- *
- * SCHEMA DESIGN PRINCIPLES:
- *   - Use .trim() on all string inputs — prevent "  John  " from being stored
- *   - Use .min(1) on required strings — prevent empty string "" from passing
- *   - Use .transform() to normalize data (lowercase, strip dashes)
- *   - Keep enum values in sync with PostgreSQL enums AND constants.js
- */
 
 const { z } = require('zod');
 const { LEAD_SOURCE, LEAD_STATUS } = require('../utils/constants');
 
-// ── Reusable field definitions ────────────────────────────────────────────────
 
 const nameField = z
   .string({ required_error: 'Name is required' })
@@ -53,12 +35,7 @@ const notesField = z
   .optional()
   .nullable();
 
-// ── Exported schemas ──────────────────────────────────────────────────────────
 
-/**
- * POST /api/v1/leads
- * Creates a new lead.
- */
 const createLeadSchema = z.object({
   name:   nameField,
   phone:  phoneField,
@@ -66,15 +43,7 @@ const createLeadSchema = z.object({
   notes:  notesField,
 });
 
-/**
- * PATCH /api/v1/leads/:id/status
- * Updates only the status field of a lead.
- *
- * WHY PATCH FOR STATUS UPDATE?
- *   PATCH = partial update (only the fields you send are changed).
- *   PUT   = full replacement (you must send ALL fields).
- *   Status updates only touch the status column — PATCH is semantically correct.
- */
+
 const updateStatusSchema = z.object({
   status: z.enum(
     [
@@ -90,14 +59,7 @@ const updateStatusSchema = z.object({
   ),
 });
 
-/**
- * GET /api/v1/leads (query parameter validation)
- * Validates optional search and filter query params.
- *
- * WHY VALIDATE QUERY PARAMS?
- *   `?limit=DROP TABLE leads` is a real attack vector.
- *   Always validate and coerce query params before using them in SQL.
- */
+
 const getLeadsQuerySchema = z.object({
   search: z.string().trim().max(100).optional(),
   status: z

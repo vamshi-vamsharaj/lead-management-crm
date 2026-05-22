@@ -1,4 +1,6 @@
 import { useState, createContext, useContext } from "react";
+import { Outlet } from "react-router-dom";
+
 import { DesktopSidebar, MobileSidebar } from "./Sidebar";
 import TopBar from "./TopBar";
 
@@ -6,7 +8,7 @@ export const AddLeadContext = createContext(null);
 
 export const useAddLeadSheet = () => useContext(AddLeadContext);
 
-export default function AppLayout({ children }) {
+export default function AppLayout() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [addLeadSheetOpen, setAddLeadSheetOpen] = useState(false);
 
@@ -36,7 +38,7 @@ export default function AppLayout({ children }) {
 
           {/* Page Content */}
           <main className="flex-1 px-4 lg:px-6 py-6">
-            {children}
+            <Outlet />
           </main>
         </div>
       </div>

@@ -1,26 +1,7 @@
-/**
- * src/services/api/leads.api.js
- *
- * All HTTP functions for the leads resource.
- *
- * WHY A SEPARATE SERVICE FILE?
- *   React Query hooks call these functions. Components call hooks.
- *   The chain: Component → Hook → API function → Axios → Server
- *
- *   This means:
- *   - If the API URL changes, you update ONE file
- *   - Hooks stay clean (no URL strings, no axios imports)
- *   - Functions are independently testable
- *   - Type signatures are clear and documented
- *
- * RETURN CONVENTION:
- *   Every function unwraps response.data.data — the inner payload.
- *   Hooks and components work with the actual data, not the envelope.
- */
+
 
 import apiClient from './axios.config'
 
-// ── Leads API functions ───────────────────────────────────────────────────────
 
 /**
  * Fetch all leads with optional filtering/search/pagination.

@@ -1,23 +1,3 @@
-/**
- * database/migrations/run.js
- *
- * Programmatic migration runner.
- *
- * WHY NOT just run the SQL file manually?
- *   Manual psql commands are error-prone and can't be automated
- *   in CI/CD pipelines or Docker entrypoints. This script lets
- *   you run `npm run migrate` reliably in any environment.
- *
- * HOW IT WORKS:
- *   1. Creates a `schema_migrations` table if it doesn't exist.
- *      This table tracks which migration files have already run.
- *   2. Reads all .sql files from this directory, sorted by name.
- *   3. Skips files that have already been recorded in the table.
- *   4. Runs each pending migration inside a transaction.
- *      If any SQL statement fails, the transaction rolls back —
- *      your database is never left in a half-migrated state.
- *   5. Records the filename in schema_migrations on success.
- */
 
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
 

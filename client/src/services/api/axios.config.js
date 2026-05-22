@@ -1,30 +1,3 @@
-/**
- * src/services/api/axios.config.js
- *
- * Centralized Axios instance — the single HTTP client for the entire app.
- *
- * WHY ONE AXIOS INSTANCE?
- *   If every component creates its own axios call:
- *   - Base URL is duplicated in 20 files
- *   - Auth headers must be added everywhere
- *   - Error handling is inconsistent
- *   - Changing the base URL requires a project-wide find/replace
- *
- *   One instance = one place to configure EVERYTHING.
- *   Real companies (Stripe, Linear, Notion) all use this pattern.
- *
- * WHY INTERCEPTORS?
- *   Interceptors are middleware for HTTP requests/responses.
- *   Request interceptor:  runs BEFORE every request leaves the browser
- *   Response interceptor: runs AFTER every response arrives
- *
- *   This lets you:
- *   - Inject auth tokens without touching component code
- *   - Transform error shapes before components see them
- *   - Show global toast notifications for API errors
- *   - Log requests in development
- *   - Redirect to login on 401 — once, globally
- */
 
 import axios from 'axios'
 import toast from 'react-hot-toast'

@@ -1,21 +1,4 @@
-/**
- * src/config/env.js
- *
- * Environment variable validation and centralized config object.
- *
- * WHY VALIDATE ENV VARS AT STARTUP?
- *   Without this, a missing DB_PASSWORD causes a crash when the
- *   first database query runs — possibly minutes after startup,
- *   in a request handler, with a cryptic "undefined" error.
- *   Validating at startup causes a clear, immediate failure with
- *   a descriptive message. "Fail fast" is a core engineering principle.
- *
- * WHY A CONFIG OBJECT instead of process.env everywhere?
- *   - Type coercion in one place (PORT is a number, DB_SSL is a boolean)
- *   - Intellisense/autocomplete in your editor
- *   - Easy to mock in tests
- *   - One import instead of process.env scattered everywhere
- */
+
 
 require('dotenv').config();
 

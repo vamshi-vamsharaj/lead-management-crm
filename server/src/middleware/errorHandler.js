@@ -1,27 +1,3 @@
-/**
- * src/middleware/errorHandler.js
- *
- * Centralized global error handling middleware.
- *
- * WHY CENTRALIZED ERROR HANDLING?
- *   Without this, every route handler has its own error response logic:
- *     - Route A sends { error: message }
- *     - Route B sends { msg: error }
- *     - Route C crashes with an unhandled error
- *
- *   A single error handler guarantees:
- *   1. Consistent error response shape across the entire API
- *   2. Proper logging of unexpected errors (bugs)
- *   3. Safe messages — bugs never leak stack traces to clients in production
- *   4. One place to add Sentry/Datadog error reporting later
- *
- * HOW EXPRESS ERROR MIDDLEWARE WORKS:
- *   Express identifies error middleware by its 4-parameter signature: (err, req, res, next).
- *   Any call to next(err) from any route, controller, or asyncHandler
- *   skips all regular middleware and lands here.
- *
- * REGISTER THIS LAST in app.js — after all routes.
- */
 
 const ApiError   = require('../utils/ApiError');
 const ApiResponse = require('../utils/ApiResponse');
