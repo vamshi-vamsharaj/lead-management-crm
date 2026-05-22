@@ -1,0 +1,204 @@
+{
+  "info": {
+    "name": "Lead Management API",
+    "description": "Complete API collection for the Lead Management System.\n\nBase URL: http://localhost:5000/api/v1\n\nUsage:\n1. Import this file into Postman\n2. Set the `baseUrl` variable to your server URL\n3. Run requests in the order listed",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "leadId",
+      "value": "",
+      "description": "Auto-populated after Create Lead request"
+    }
+  ],
+  "item": [
+    {
+      "name": "🏥 Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health",
+        "description": "Verify the API is running and healthy."
+      }
+    },
+    {
+      "name": "📊 Get Dashboard Stats",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/leads/stats",
+        "description": "Get aggregate counts: total, new, interested, not_interested, converted, addedThisWeek, conversionRate"
+      }
+    },
+    {
+      "name": "📋 Get All Leads",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/leads",
+          "query": []
+        },
+        "description": "Returns all leads. Supports optional query params:\n- search (string)\n- status (new|interested|not_interested|converted)\n- source (call|whatsapp|field)\n- page (number, default 1)\n- limit (number, default 20)"
+      }
+    },
+    {
+      "name": "🔍 Get All Leads — Filtered (status)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/leads?status=interested",
+          "query": [{ "key": "status", "value": "interested" }]
+        }
+      }
+    },
+    {
+      "name": "🔍 Get All Leads — Search by name",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/leads?search=ravi",
+          "query": [{ "key": "search", "value": "ravi" }]
+        }
+      }
+    },
+    {
+      "name": "➕ Create Lead — Valid",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.success && json.data && json.data.id) {",
+              "  pm.collectionVariables.set('leadId', json.data.id);",
+              "  console.log('leadId saved:', json.data.id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/leads",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Lead\",\n  \"phone\": \"+91-9000000001\",\n  \"source\": \"call\",\n  \"notes\": \"Created via Postman for testing\"\n}"
+        },
+        "description": "Expected: 201 Created with full lead object.\nThe test script auto-saves the `id` to the `leadId` collection variable."
+      }
+    },
+    {
+      "name": "❌ Create Lead — Missing name (validation test)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/leads",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"+91-9000000002\",\n  \"source\": \"whatsapp\"\n}"
+        },
+        "description": "Expected: 400 Bad Request with errors array showing 'name is required'"
+      }
+    },
+    {
+      "name": "❌ Create Lead — Invalid source (validation test)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/leads",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bad Source Lead\",\n  \"phone\": \"+91-9000000003\",\n  \"source\": \"email\"\n}"
+        },
+        "description": "Expected: 400 Bad Request — 'email' is not a valid source enum value"
+      }
+    },
+    {
+      "name": "❌ Create Lead — Duplicate phone (conflict test)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/leads",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Duplicate Phone Lead\",\n  \"phone\": \"+91-9000000001\",\n  \"source\": \"field\"\n}"
+        },
+        "description": "Expected: 409 Conflict — phone already exists"
+      }
+    },
+    {
+      "name": "👤 Get Single Lead",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/leads/{{leadId}}",
+        "description": "Expected: 200 with the lead object.\nRequires `leadId` variable (auto-set by Create Lead request)."
+      }
+    },
+    {
+      "name": "❌ Get Single Lead — Not Found",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/leads/00000000-0000-0000-0000-000000000000",
+        "description": "Expected: 404 Not Found with descriptive message"
+      }
+    },
+    {
+      "name": "✏️ Update Lead Status — interested",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/leads/{{leadId}}/status",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"interested\"\n}"
+        },
+        "description": "Expected: 200 with updated lead. Check that `status` is now 'interested' and `updated_at` changed."
+      }
+    },
+    {
+      "name": "✏️ Update Lead Status — converted",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/leads/{{leadId}}/status",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"converted\"\n}"
+        }
+      }
+    },
+    {
+      "name": "❌ Update Status — Invalid value",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/leads/{{leadId}}/status",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"maybe\"\n}"
+        },
+        "description": "Expected: 400 — 'maybe' is not a valid status"
+      }
+    },
+    {
+      "name": "🗑️ Delete Lead",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/leads/{{leadId}}",
+        "description": "Expected: 200 with { id, name } of deleted lead"
+      }
+    },
+    {
+      "name": "❌ Delete Lead — Not Found (after delete)",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/leads/{{leadId}}",
+        "description": "Expected: 404 — lead was already deleted"
+      }
+    }
+  ]
+}
